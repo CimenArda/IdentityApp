@@ -45,20 +45,20 @@ namespace AspNetCoreIdentity.Web.Controllers
 
 
         [HttpPost]
-        public async  Task<IActionResult> Signin(SignInViewModel model,string? returnUrl=null)
+        public async Task<IActionResult> Signin(SignInViewModel model, string? returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Action("Index", "Home");
 
             var hasUser = await _userManager.FindByEmailAsync(model.Email!);
 
-            if (hasUser ==null)
+            if (hasUser == null)
             {
                 ModelState.AddModelError(string.Empty, "Email veya Şifreniz Yanlış.");
                 return View();
             }
             var signInResult = await _signInManager.PasswordSignInAsync(hasUser, model.Password!, model.RememberMe, true);
 
-          
+
 
 
             if (signInResult.Succeeded)
@@ -75,20 +75,20 @@ namespace AspNetCoreIdentity.Web.Controllers
 
             }
 
-            ModelState.AddErrorModelList(new List<string>() { $"Email veya şifreniz yanlış.Başarısız giriş sayısı:{ await _userManager.GetAccessFailedCountAsync(hasUser)}" });
+            ModelState.AddErrorModelList(new List<string>() { $"Email veya şifreniz yanlış.Başarısız giriş sayısı:{await _userManager.GetAccessFailedCountAsync(hasUser)}" });
 
-      
 
-         
+
+
             return View();
-            
-             
-            
-            
 
 
 
-            
+
+
+
+
+
         }
 
 
@@ -122,13 +122,22 @@ namespace AspNetCoreIdentity.Web.Controllers
                 return RedirectToAction(nameof(HomeController.Signup));//get kısmına bir daha istek
             }
 
-            ModelState.AddErrorModelList(identityResult.Errors.Select(x=>x.Description).ToList());
+            ModelState.AddErrorModelList(identityResult.Errors.Select(x => x.Description).ToList());
 
-         
+
             return View();
 
 
 
+        }
+
+
+
+
+
+        public IActionResult ResetPassword()
+        {
+            return View();
         }
 
 

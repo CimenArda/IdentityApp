@@ -30,14 +30,31 @@
                     <span class="text-danger" asp-validation-for="Password"></span>
 
                 </div>
-                <div class="mb-3 form-check offset-md-5">
-                    <label for="RememberMe" asp-for="RememberMe" class="form-check-label" >Beni hatırla</label>
-                <input asp-for="RememberMe"  class="form-check-input" >
+
+                <div class="row">
+                    <div class="col-md-11">
+                        <div class="mb-3 form-check offset-md-5">
+                            <label for="RememberMe" asp-for="RememberMe" class="form-check-label">Beni hatırla</label>
+                            <input asp-for="RememberMe" class="form-check-input">
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-1 me-0">
+                        <div>
+                            <a  asp-action="ResetPassword" asp-controller="Home" >Şifremi unuttum</a>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
                 
-            </div>
             </div>
 
             <button type="submit" class="btn btn-primary">Üye Giriş</button>
+           
         </form>
     
     </div>
