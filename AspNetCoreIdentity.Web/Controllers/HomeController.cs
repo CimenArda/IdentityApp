@@ -1,5 +1,6 @@
 ﻿using AspNetCoreIdentity.Web.Extentions;
 using AspNetCoreIdentity.Web.Models;
+using AspNetCoreIdentity.Web.Services;
 using AspNetCoreIdentity.Web.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,15 @@ namespace AspNetCoreIdentity.Web.Controllers
 
         private readonly SignInManager<AppUser> _signInManager;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        private readonly IEmailService _emailservice;
+
+
+        public HomeController(ILogger<HomeController> logger, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,IEmailService emailService)
         {
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
+            _emailservice = emailService;
         }
 
         public IActionResult Index()
@@ -144,7 +149,7 @@ namespace AspNetCoreIdentity.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel request)
         {
-            var hasUser = await _userManager.FindByEmailAsync(request.Email!);
+            var hasUser = await _userManager.FindByEmailAsync(request.Email);
 
             if (hasUser==null)
             {
@@ -153,11 +158,17 @@ namespace AspNetCoreIdentity.Web.Controllers
 
             string passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(hasUser);
 
-            var passwordRestLink = Url.Action("ResetPassword", "Home", new { userId = hasUser.Id, Token = passwordResetToken });
+            var passwordResetLink = Url.Action("ResetPassword", "Home", new { userId = hasUser.Id, Token = passwordResetToken },HttpContext.Request.Scheme);
             // örnek link https://localhost://7155?userID=12213&token=adawwqeqwdsazcx
 
 
             //Email Service
+
+            await _emailservice.SendResetPasswordEmail(passwordResetLink!,hasUser.Email!);
+
+
+
+
 
             TempData["SuccessMessage"] = "Şifre yenileme linki e-posta adresinize gönderilmiştir.";
             return RedirectToAction(nameof(ForgetPassword));

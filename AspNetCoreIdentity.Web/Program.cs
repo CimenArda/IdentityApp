@@ -1,5 +1,7 @@
 using AspNetCoreIdentity.Web.Extentions;
 using AspNetCoreIdentity.Web.Models;
+using AspNetCoreIdentity.Web.OptionsModels;
+using AspNetCoreIdentity.Web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +34,9 @@ builder.Services.ConfigureApplicationCookie(opt => {
 });
 
 
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 
