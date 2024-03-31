@@ -2,7 +2,7 @@
 
 namespace AspNetCoreIdentity.Web.ViewModels
 {
-    public class ResetPasswordViewModel
+    public class ForgetPasswordViewModel
     {
 
         [Required(ErrorMessage = "Email boş bırakılamaz.")]

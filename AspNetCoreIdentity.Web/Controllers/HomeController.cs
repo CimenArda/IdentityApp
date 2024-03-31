@@ -135,12 +135,42 @@ namespace AspNetCoreIdentity.Web.Controllers
 
 
 
-        public IActionResult ResetPassword()
+        public IActionResult ForgetPassword()
         {
             return View();
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel request)
+        {
+            var hasUser = await _userManager.FindByEmailAsync(request.Email!);
+
+            if (hasUser==null)
+            {
+                return RedirectToAction("Signin","Home");
+            }
+
+            string passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(hasUser);
+
+            var passwordRestLink = Url.Action("ResetPassword", "Home", new { userId = hasUser.Id, Token = passwordResetToken });
+            // örnek link https://localhost://7155?userID=12213&token=adawwqeqwdsazcx
+
+
+            //Email Service
+
+            TempData["SuccessMessage"] = "Şifre yenileme linki e-posta adresinize gönderilmiştir.";
+            return RedirectToAction(nameof(ForgetPassword));
+
+
+
+
+
+
+
+
+
+        }
 
 
 
