@@ -1,4 +1,5 @@
 ﻿using AspNetCoreIdentity.Web.Models;
+using AspNetCoreIdentity.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,14 +11,21 @@ namespace AspNetCoreIdentity.Web.Controllers
     {
         private readonly SignInManager<AppUser> _signInManager;
 
-        public MemberController(SignInManager<AppUser> signInManager)
+        private readonly UserManager<AppUser> _userManager;
+
+        public MemberController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
-        public IActionResult Index() 
+        public async Task<IActionResult> Index() 
         {
-            return View();
+            var currentUser = await  _userManager.FindByNameAsync(User.Identity!.Name!);
+
+            var userviewModel =new UserViewModel { Email=currentUser!.Email, PhoneNumber=currentUser.PhoneNumber,UserName=currentUser.UserName};
+
+            return View(userviewModel);
         }
 
 

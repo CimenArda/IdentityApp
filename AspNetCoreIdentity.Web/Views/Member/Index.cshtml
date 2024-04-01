@@ -2,6 +2,24 @@
 @{
     ViewData["Title"] = "Index";
 }
+@model UserViewModel
 
-<h1>Hoşgeldin @User.Identity!.Name</h1>
-
+<div class="alert-primary"> Kullanıcı Bilgileri</div>
+<table class="table">
+    <thead>
+        <tr>
+         
+            <th scope="col">Kullanıcı Adı</th>
+            <th scope="col">Email</th>
+            <th scope="col">Telefon Numarası</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.UserName</td>
+            <td>@Model.Email</td>
+            <td>@Model.PhoneNumber</td>
+        </tr>
+   
+    </tbody>
+</table>
