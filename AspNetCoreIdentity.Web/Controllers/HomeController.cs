@@ -185,6 +185,61 @@ namespace AspNetCoreIdentity.Web.Controllers
 
 
 
+        public IActionResult ResetPassword(string userId,string token)
+        {
+            //otomatik olarak mappleniyor
+            
+            TempData["userId"]=userId;
+            TempData["token"]=token;
+           
+
+
+            return View();
+
+        }
+
+
+        [HttpPost]
+        public async Task <IActionResult> ResetPassword(ResetPasswordViewModel request)
+        {
+            var userId = TempData["userId"].ToString();
+            var token = TempData["token"].ToString();
+
+            if (userId==null || token==null)
+            {
+                throw new Exception("Bir hata meydana geldi.");
+            }
+
+            var hasUser = await _userManager.FindByIdAsync(userId);
+            if (hasUser == null)
+            {
+                ModelState.AddModelError(string.Empty, "Kullanıcı bulunamamıştır");
+            }
+
+            var result = await _userManager.ResetPasswordAsync(hasUser, token, request.Password);
+            if (result.Succeeded)
+            {
+                TempData["SuccessMessage"] = "Şifreniz başarıyla yenilenmiştir";
+            }
+            else
+            {
+                ModelState.AddErrorModelList(result.Errors.Select(x=>x.Description).ToList());
+                
+            }
+
+                return View();
+
+
+        }
+
+
+
+
+
+
+
+
+
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
