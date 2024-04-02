@@ -8,7 +8,8 @@
 
         public string? PhoneNumber { get; set; }
 
-
+        public string? PictureUrl { get; set; }
 
     }
 }
+ 

@@ -29,7 +29,13 @@ namespace AspNetCoreIdentity.Web.Controllers
         {
             var currentUser = await  _userManager.FindByNameAsync(User.Identity!.Name!);
 
-            var userviewModel =new UserViewModel { Email=currentUser!.Email, PhoneNumber=currentUser.PhoneNumber,UserName=currentUser.UserName};
+            var userviewModel =new UserViewModel
+            { Email=currentUser!.Email,
+                PhoneNumber=currentUser.PhoneNumber
+                ,UserName=currentUser.UserName,
+                PictureUrl=currentUser.Picture
+                        
+            };
 
             return View(userviewModel);
         }
@@ -117,7 +123,7 @@ namespace AspNetCoreIdentity.Web.Controllers
             currentUser.PhoneNumber = request.Phone;
 
 
-            if (request.Picture == null &&request.Picture!.Length>0)
+            if (request.Picture != null && request.Picture.Length>0)
             {
                 var wwwrootFolder = _fileProvider.GetDirectoryContents("wwwroot");
                 

@@ -4,6 +4,22 @@
 }
 @model UserViewModel
 
+<div class="row">
+
+    <div class="col-md-4 offset-md-4" >
+        @if (String.IsNullOrEmpty(Model.PictureUrl))
+        {
+            <img class="rounded mx-auto d-block" src="/UserPicture/DefaultUser.jpg" width="200" height="250" />
+        }
+        else
+        {
+            <img class="rounded mx-auto d-block " src="/UserPicture/@(Model.PictureUrl)" width="200" height="250" />
+        }
+    </div>
+
+</div>
+
+
 <div class="alert-primary"> Kullanıcı Bilgileri</div>
 <table class="table">
     <thead>
