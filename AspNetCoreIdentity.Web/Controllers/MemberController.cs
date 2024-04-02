@@ -4,6 +4,8 @@ using AspNetCoreIdentity.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.FileProviders;
 
 namespace AspNetCoreIdentity.Web.Controllers
 {
@@ -14,10 +16,13 @@ namespace AspNetCoreIdentity.Web.Controllers
 
         private readonly UserManager<AppUser> _userManager;
 
-        public MemberController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager)
+        private readonly IFileProvider _fileProvider;
+
+        public MemberController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IFileProvider fileProvider)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _fileProvider = fileProvider;
         }
 
         public async Task<IActionResult> Index() 
@@ -76,12 +81,103 @@ namespace AspNetCoreIdentity.Web.Controllers
 
 
 
+        public  async Task<IActionResult> UserEdit()
+        {
+            ViewBag.GenderList = new SelectList(Enum.GetNames(typeof(Gender)));
+            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            var userEditViewModel = new UserEditViewModel()
+            {
+                UserName=currentUser.UserName,
+                BirthDay=currentUser.Birthday,
+                Email=currentUser.Email,
+                Phone=currentUser.PhoneNumber,
+                City=currentUser.City,
+                Gender=currentUser.Gender,
+            };
 
-        public async Task<IActionResult> Logout()
+            return View(userEditViewModel);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> UserEdit(UserEditViewModel request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            var currentUser = await _userManager.FindByNameAsync(User.Identity!.Name!);
+
+            currentUser.UserName= request.UserName;
+            currentUser.Email = request.Email;
+            currentUser.Birthday = request.BirthDay;
+            currentUser.City = request.City;
+            currentUser.Gender= request.Gender;
+            currentUser.PhoneNumber = request.Phone;
+
+
+            if (request.Picture == null &&request.Picture!.Length>0)
+            {
+                var wwwrootFolder = _fileProvider.GetDirectoryContents("wwwroot");
+                
+                var randomFileName = $"{Guid.NewGuid().ToString()}{Path.GetExtension(request.Picture.FileName)}"; //.jpg .png
+
+
+                var newPicturePath =Path.Combine(wwwrootFolder.First(x=>x.Name =="UserPicture").PhysicalPath!,randomFileName);
+
+                using var stream = new FileStream(newPicturePath, FileMode.Create);
+                await request.Picture.CopyToAsync(stream);
+
+                currentUser.Picture = randomFileName;
+
+            }
+               var updateToUserResult=await _userManager.UpdateAsync(currentUser);
+
+
+            if (!updateToUserResult.Succeeded)
+            {
+                ModelState.AddErrorModelList(updateToUserResult.Errors.Select(x=>x.Description).ToList());
+                return View();
+            }
+
+            await _userManager.UpdateSecurityStampAsync(currentUser);
+            await _signInManager.SignOutAsync();
+            await _signInManager.SignInAsync(currentUser,true);
+
+            var userEditViewModel = new UserEditViewModel()
+            {
+                UserName = currentUser.UserName,
+                BirthDay = currentUser.Birthday,
+                Email = currentUser.Email,
+                Phone = currentUser.PhoneNumber,
+                City = currentUser.City,
+                Gender = currentUser.Gender,
+               
+            };
+            TempData["SuccessMessage"] = "Kullanıcı Bilgileriniz Başarıyla  değiştirilmiştir";
+            return View(userEditViewModel);
+        }
+
+            public async Task<IActionResult> Logout()
         {
             await  _signInManager.SignOutAsync();
 
             return RedirectToAction("Index","Home");
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

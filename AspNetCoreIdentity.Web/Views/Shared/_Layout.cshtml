@@ -30,7 +30,7 @@
 
                     </ul>
 
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User.Identity!.IsAuthenticated)
                     {
                         <ul class="navbar-nav me-0">
                             <li class="nav-item dropdown">
@@ -39,6 +39,7 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" asp-controller="Member" asp-action="Index">Profil Bilgileri</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Member" asp-action="UserEdit">Profil Bilgisi Düzenle</a></li>
                                     <li><a class="dropdown-item" asp-controller="Member" asp-action="PasswordChange">Şifre Değiştir</a></li>
                                     <li><a class="dropdown-item" asp-controller="Member" asp-action="Logout" >Çıkış Yap</a></li>
 
@@ -48,7 +49,11 @@
 
 
                         </ul>
-                    }else
+                    <div class="col-md-2">
+                        
+                    </div> 
+                    }
+                    else
                     {
                         <a asp-action="Signup" asp-controller="Home" class="btn btn-outline-success">Üye Kayıt </a>
                         <a asp-action="Signin" asp-controller="Home" class="btn btn-outline-success mx-1">Üye Giriş </a>
