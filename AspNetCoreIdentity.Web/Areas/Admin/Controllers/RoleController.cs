@@ -20,7 +20,13 @@ namespace AspNetCoreIdentity.Web.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            return View();
+           var roles =  _roleManager.Roles.Select(x => new RolListViewModel
+            {
+                Id = x.Id,
+                Name = x.Name
+            }).ToList();
+
+            return View(roles);
         }
 
         [HttpGet]

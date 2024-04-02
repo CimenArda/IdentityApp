@@ -4,6 +4,47 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<a class="btn btn-outline-primary" asp-controller="Role" asp-action="RoleCreate" asp-area="Admin">Rol Oluştur</a>
 
+
+
+@model List<AdminModel.RolListViewModel>
+
+
+    <div class="row">
+        <div class="col-md-6 offset-md-2">
+            <h2>Rol Listesi</h2>
+        </div>
+    <div class="col-md-2"><a class="btn btn-outline-primary" asp-controller="Role" asp-action="RoleCreate" asp-area="Admin">Rol Oluştur</a></div>
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-8 offset-md-2">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Rol Adı</td>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+
+                    </tr>
+                }
+
+
+            </tbody>
+
+        </table>
+
+        </div>
+    </div>
 
