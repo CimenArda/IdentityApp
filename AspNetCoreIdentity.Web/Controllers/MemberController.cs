@@ -165,7 +165,17 @@ namespace AspNetCoreIdentity.Web.Controllers
             return View(userEditViewModel);
         }
 
-            public async Task<IActionResult> Logout()
+
+
+
+        public async Task<IActionResult> AccessDenied(string ReturnUrl)
+        {
+            return View();
+        }
+
+
+
+        public async Task<IActionResult> Logout()
         {
             await  _signInManager.SignOutAsync();
 

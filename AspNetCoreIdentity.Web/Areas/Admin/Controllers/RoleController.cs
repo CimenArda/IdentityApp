@@ -1,6 +1,7 @@
 ﻿using AspNetCoreIdentity.Web.Areas.Admin.Models;
 using AspNetCoreIdentity.Web.Extentions;
 using AspNetCoreIdentity.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ namespace AspNetCoreIdentity.Web.Areas.Admin.Controllers
             _roleManager = roleManager;
         }
 
+        [Authorize(Roles = "Admin,Role_Action")]
         public IActionResult Index()
         {
             var roles = _roleManager.Roles.Select(x => new RolListViewModel
@@ -30,6 +32,8 @@ namespace AspNetCoreIdentity.Web.Areas.Admin.Controllers
             return View(roles);
         }
 
+
+        [Authorize(Roles ="Admin,Role_Action")]
         [HttpGet]
         public IActionResult RoleCreate()
         {
@@ -37,6 +41,7 @@ namespace AspNetCoreIdentity.Web.Areas.Admin.Controllers
         }
 
 
+        [Authorize(Roles = "Admin,Role_Action")]
         [HttpPost]
         public async Task<IActionResult> RoleCreate(RoleCreateViewModel request)
         {
@@ -52,7 +57,7 @@ namespace AspNetCoreIdentity.Web.Areas.Admin.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin,Role_Action")]
         [HttpGet]
         public async Task<IActionResult> RoleUpdate(string id)
         {
@@ -65,7 +70,7 @@ namespace AspNetCoreIdentity.Web.Areas.Admin.Controllers
             return View(new RoleUpdateViewModel() { Id=roleToUpdate.Id,Name=roleToUpdate.Name});
         }
 
-
+        [Authorize(Roles = "Admin,Role_Action")]
         [HttpPost]
         public async  Task<IActionResult> RoleUpdate(RoleUpdateViewModel request)
         {
@@ -83,7 +88,7 @@ namespace AspNetCoreIdentity.Web.Areas.Admin.Controllers
         }
 
 
-        
+        [Authorize(Roles ="Admin,Role_Action")]
         public async Task<IActionResult> RoleDelete(string id)
         {
             var roleToDelete = await _roleManager.FindByIdAsync(id);
