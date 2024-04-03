@@ -20,7 +20,7 @@ namespace AspNetCoreIdentity.Web.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-           var roles =  _roleManager.Roles.Select(x => new RolListViewModel
+            var roles = _roleManager.Roles.Select(x => new RolListViewModel
             {
                 Id = x.Id,
                 Name = x.Name
@@ -34,18 +34,53 @@ namespace AspNetCoreIdentity.Web.Areas.Admin.Controllers
         {
             return View();
         }
+
+
         [HttpPost]
         public async Task<IActionResult> RoleCreate(RoleCreateViewModel request)
         {
-            var result = await _roleManager.CreateAsync(new AppRole() { Name= request.Name });
+            var result = await _roleManager.CreateAsync(new AppRole() { Name = request.Name });
             if (!result.Succeeded)
             {
-                ModelState.AddErrorModelList(result.Errors.Select(x=>x.Description).ToList());
+                ModelState.AddErrorModelList(result.Errors.Select(x => x.Description).ToList());
                 return View();
             }
 
 
             return RedirectToAction("Index");
         }
+
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> RoleUpdate(string id)
+        {
+            var roleToUpdate = await _roleManager.FindByIdAsync(id);
+
+            if (roleToUpdate == null)
+            {
+                throw new Exception("Güncellenecek rol bulunamamaktadır");
+            }
+            return View(new RoleUpdateViewModel() { Id=roleToUpdate.Id,Name=roleToUpdate.Name});
+        }
+
+
+        [HttpPost]
+        public async  Task<IActionResult> RoleUpdate(RoleUpdateViewModel request)
+        {
+             var rolToUpdate = await _roleManager.FindByIdAsync(request.Id);
+
+            if (rolToUpdate == null)
+            {
+                throw new Exception("Güncellenecek rol bulunamamaktadır");
+
+            }
+            rolToUpdate.Name = request.Name;
+            await _roleManager.UpdateAsync(rolToUpdate);
+
+            return RedirectToAction("Index");
+        }
+
     }
 }
