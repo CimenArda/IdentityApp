@@ -82,5 +82,25 @@ namespace AspNetCoreIdentity.Web.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+
+        
+        public async Task<IActionResult> RoleDelete(string id)
+        {
+            var roleToDelete = await _roleManager.FindByIdAsync(id);
+            if (roleToDelete == null)
+            {
+                throw new Exception("Silinecek rol bulunamamaktadır");
+
+            }
+          var result = await _roleManager.DeleteAsync(roleToDelete);
+
+            if (!result.Succeeded)
+            {
+                throw new Exception("Silme  İşlemi  gerçekleştirilememiştir.");
+
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

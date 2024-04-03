@@ -37,6 +37,7 @@
                         <td>@item.Id</td>
                         <td>@item.Name</td>
                         <td><a asp-area="Admin" asp-action="RoleUpdate" asp-controller="Role" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Role Güncelle</a></td>
+                        <td><a asp-area="Admin" asp-action="RoleDelete" asp-controller="Role" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Role Sil</a></td>
                     </tr>
                 }
 
