@@ -41,6 +41,8 @@
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" asp-controller="Member" asp-action="Index">Profil Bilgileri</a></li>
                                     <li><a class="dropdown-item" asp-controller="Member" asp-action="UserEdit">Profil Bilgisi Düzenle</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Member" asp-action="Claims">Claimler</a></li>
+
                                     <li><a class="dropdown-item" asp-controller="Member" asp-action="PasswordChange">Şifre Değiştir</a></li>
                                     @{
                                         if (User.HasClaim(x=>x.Type==ClaimTypes.Role && x.Value == "Admin"))
