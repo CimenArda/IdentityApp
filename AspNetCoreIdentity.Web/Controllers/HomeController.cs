@@ -5,6 +5,7 @@ using AspNetCoreIdentity.Web.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace AspNetCoreIdentity.Web.Controllers
 {
@@ -99,11 +100,6 @@ namespace AspNetCoreIdentity.Web.Controllers
 
 
 
-
-
-
-
-
         public IActionResult Signup()
         {
 
@@ -121,16 +117,34 @@ namespace AspNetCoreIdentity.Web.Controllers
             }
             var identityResult = await _userManager.CreateAsync(new() { UserName = requests.UserName, PhoneNumber = requests.Phone, Email = requests.Email }, requests.PasswordConfirm);
 
-            if (identityResult.Succeeded)
+
+            if (!identityResult.Succeeded)
             {
+                ModelState.AddErrorModelList(identityResult.Errors.Select(x => x.Description).ToList());
+                return View();
+
+            }
+          
+                var exchangeExpireClaim = new Claim("ExchangeExpireDate",DateTime.Now.AddDays(10).ToString());
+
+                var user = await _userManager.FindByNameAsync(requests.UserName);
+
+               var claimResult =  await _userManager.AddClaimAsync(user!, exchangeExpireClaim);
+
+            if (!claimResult.Succeeded)
+            {
+
+                ModelState.AddErrorModelList(identityResult.Errors.Select(x => x.Description).ToList());
+                return View();
+            }
                 TempData["SuccessMessage"] = "Üyelik Kayıt işlemi başarıyla gerçekleşmiştir.";
                 return RedirectToAction(nameof(HomeController.Signup));//get kısmına bir daha istek
-            }
+            
+                
+         
 
-            ModelState.AddErrorModelList(identityResult.Errors.Select(x => x.Description).ToList());
 
-
-            return View();
+         
 
 
 

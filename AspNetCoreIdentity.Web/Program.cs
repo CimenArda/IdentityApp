@@ -2,8 +2,10 @@ using AspNetCoreIdentity.Web.ClaimProvider;
 using AspNetCoreIdentity.Web.Extentions;
 using AspNetCoreIdentity.Web.Models;
 using AspNetCoreIdentity.Web.OptionsModels;
+using AspNetCoreIdentity.Web.Requirements;
 using AspNetCoreIdentity.Web.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -21,6 +23,8 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 //ýdentity
 builder.Services.AddIdentityWithExtentions();
 
+builder.Services.AddScoped<IAuthorizationHandler,ExchangeExpireRequirementHandler>();
+
 
 builder.Services.AddAuthorization(opt =>
 {
@@ -29,6 +33,12 @@ builder.Services.AddAuthorization(opt =>
     {
         policy.RequireClaim("City", "Ankara");
     });
+
+    opt.AddPolicy("ExchangePolicy", policy =>
+    {
+        policy.AddRequirements(new ExchangeExpireRequirement());
+    });
+
 });
 
 
