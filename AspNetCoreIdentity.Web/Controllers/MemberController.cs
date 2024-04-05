@@ -188,11 +188,15 @@ namespace AspNetCoreIdentity.Web.Controllers
             }).ToList();
 
             return View(userClaimList);
-        }  
+        }
 
 
-
-
+        [Authorize(Policy ="AnkaraPolicy")]
+        [HttpGet]
+        public IActionResult AnkaraPage()
+        {
+            return View();
+        }
 
         public async Task<IActionResult> Logout()
         {
@@ -200,18 +204,6 @@ namespace AspNetCoreIdentity.Web.Controllers
 
             return RedirectToAction("Index","Home");
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }

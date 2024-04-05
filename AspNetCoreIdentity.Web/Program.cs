@@ -1,7 +1,9 @@
+using AspNetCoreIdentity.Web.ClaimProvider;
 using AspNetCoreIdentity.Web.Extentions;
 using AspNetCoreIdentity.Web.Models;
 using AspNetCoreIdentity.Web.OptionsModels;
 using AspNetCoreIdentity.Web.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -18,6 +20,16 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 //ýdentity
 builder.Services.AddIdentityWithExtentions();
+
+
+builder.Services.AddAuthorization(opt =>
+{
+
+    opt.AddPolicy("AnkaraPolicy", policy =>
+    {
+        policy.RequireClaim("City", "Ankara");
+    });
+});
 
 
 builder.Services.ConfigureApplicationCookie(opt => {
@@ -40,6 +52,7 @@ builder.Services.ConfigureApplicationCookie(opt => {
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
 
+builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
 
 
 builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
