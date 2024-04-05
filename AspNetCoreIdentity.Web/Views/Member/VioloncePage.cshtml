@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewData["Title"] = "VioloncePage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Şiddet İçeren Sayfa</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* Custom CSS */
+        body {
+            padding-top: 5rem;
+            background-color: #f8f9fa;
+        }
+        .page-content {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-danger fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Şiddet İçeren Sayfa</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container page-content">
+        <!-- Warning Section -->
+        <section>
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading">Önemli Uyarı</h4>
+                <p>Bu sayfa şiddet içeren içerikler içerebilir. Hassas okuyucular için uygun değildir.</p>
+            </div>
+        </section>
+
+        <!-- Content Section -->
+        <section>
+            <h2 class="mb-4"><i class="bi bi-exclamation-triangle-fill text-danger"></i> Şiddet İçeren İçerik</h2>
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">Bu bölüm, şiddet içeren konuları içerebilir. Lütfen sadece uygun gören kişiler bu içeriği okusun.</p>
+                    <ul>
+                        <li>Şiddet içeren görüntüler</li>
+                        <li>Şiddet içeren dil veya söylem</li>
+                        <li>Şiddet içeren hikayeler veya anlatılar</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto py-3 bg-danger text-white">
+        <div class="container text-center">
+            <span>&copy; 2024 Şiddet İçeren Sayfa</span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JavaScript and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace AspNetCoreIdentity.Web.Models
 {
@@ -6,7 +7,8 @@ namespace AspNetCoreIdentity.Web.Models
     {
         public string? City { get; set; }
 
-        public DateTime Birthday { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime? Birthday { get; set; }
         public string? Picture { get; set; }
         public Gender? Gender { get; set; }
 

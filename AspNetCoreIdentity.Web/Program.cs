@@ -24,7 +24,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 builder.Services.AddIdentityWithExtentions();
 
 builder.Services.AddScoped<IAuthorizationHandler,ExchangeExpireRequirementHandler>();
-
+builder.Services.AddScoped<IAuthorizationHandler, ViolonceExpireRequirementHandler>();
 
 builder.Services.AddAuthorization(opt =>
 {
@@ -38,6 +38,11 @@ builder.Services.AddAuthorization(opt =>
     {
         policy.AddRequirements(new ExchangeExpireRequirement());
     });
+    opt.AddPolicy("VioloncePolicy", policy =>
+    {
+        policy.AddRequirements(new ViolonceRequirement() {ThresholdAge=18 });
+    });
+
 
 });
 

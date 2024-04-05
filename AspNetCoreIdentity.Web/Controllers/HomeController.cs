@@ -62,37 +62,26 @@ namespace AspNetCoreIdentity.Web.Controllers
                 ModelState.AddModelError(string.Empty, "Email veya Şifreniz Yanlış.");
                 return View();
             }
+
             var signInResult = await _signInManager.PasswordSignInAsync(hasUser, model.Password!, model.RememberMe, true);
-
-
-
-
-            if (signInResult.Succeeded)
-            {
-                return Redirect(returnUrl);
-            }
 
             if (signInResult.IsLockedOut)
             {
-
                 ModelState.AddErrorModelList(new List<string>() { "3 dakika boyunca giriş yapamazsınız." });
                 return View();
-
-
             }
 
-            ModelState.AddErrorModelList(new List<string>() { $"Email veya şifreniz yanlış.Başarısız giriş sayısı:{await _userManager.GetAccessFailedCountAsync(hasUser)}" });
+            if (!signInResult.Succeeded)
+            {
+                ModelState.AddErrorModelList(new List<string>() { $"Email veya şifreniz yanlış.Başarısız giriş sayısı:{await _userManager.GetAccessFailedCountAsync(hasUser)}" });
+                return View();
+            }
 
-
-
-
-            return View();
-
-
-
-
-
-
+            if (hasUser.Birthday.HasValue)
+            {
+                await _signInManager.SignInWithClaimsAsync(hasUser, model.RememberMe, new[] { new Claim("Birthday", hasUser.Birthday.Value.ToString()) });
+            }
+            return Redirect(returnUrl!);
 
 
         }

@@ -94,8 +94,8 @@ namespace AspNetCoreIdentity.Web.Controllers
             var userEditViewModel = new UserEditViewModel()
             {
                 UserName=currentUser.UserName,
-                BirthDay=currentUser.Birthday,
-                Email=currentUser.Email,
+                BirthDay = currentUser.Birthday.HasValue ? currentUser.Birthday.Value : default(DateTime),
+                Email = currentUser.Email,
                 Phone=currentUser.PhoneNumber,
                 City=currentUser.City,
                 Gender=currentUser.Gender,
@@ -154,7 +154,7 @@ namespace AspNetCoreIdentity.Web.Controllers
             var userEditViewModel = new UserEditViewModel()
             {
                 UserName = currentUser.UserName,
-                BirthDay = currentUser.Birthday,
+                BirthDay = currentUser.Birthday.HasValue ? currentUser.Birthday.Value : default(DateTime),
                 Email = currentUser.Email,
                 Phone = currentUser.PhoneNumber,
                 City = currentUser.City,
@@ -200,6 +200,14 @@ namespace AspNetCoreIdentity.Web.Controllers
         [Authorize(Policy = "ExchangePolicy")]
         [HttpGet]
         public IActionResult ExchangePage()
+        {
+            return View();
+        }
+
+
+        [Authorize(Policy = "VioloncePolicy")]
+        [HttpGet]
+        public IActionResult VioloncePage()
         {
             return View();
         }
