@@ -3,7 +3,7 @@ using AspNetCoreIdentity.Web.Extentions;
 using AspNetCoreIdentityRepository.Models;
 using AspNetCoreIdentityApp.Core.OptionsModels;
 using AspNetCoreIdentity.Web.Requirements;
-using AspNetCoreIdentity.Web.Services;
+using AspNetCoreIdentityService.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -28,7 +28,7 @@ builder.Services.AddIdentityWithExtentions();
 
 builder.Services.AddScoped<IAuthorizationHandler,ExchangeExpireRequirementHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, ViolonceExpireRequirementHandler>();
-
+builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddAuthorization(opt =>
 {
 

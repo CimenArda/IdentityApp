@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.FileProviders;
+using AspNetCoreIdentityService.Services;
 
 namespace AspNetCoreIdentity.Web.Controllers
 {
@@ -19,26 +20,22 @@ namespace AspNetCoreIdentity.Web.Controllers
 
         private readonly IFileProvider _fileProvider;
 
-        public MemberController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IFileProvider fileProvider)
+        private  string userName => User.Identity!.Name!;
+        private readonly IMemberService _memberService;
+
+        public MemberController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IFileProvider fileProvider, IMemberService memberService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _fileProvider = fileProvider;
+            _memberService = memberService;
         }
 
         public async Task<IActionResult> Index() 
         {
-            var currentUser = await  _userManager.FindByNameAsync(User.Identity!.Name!);
+           
 
-            var userviewModel =new UserViewModel
-            { Email=currentUser!.Email,
-                PhoneNumber=currentUser.PhoneNumber
-                ,UserName=currentUser.UserName,
-                PictureUrl=currentUser.Picture
-                        
-            };
-
-            return View(userviewModel);
+            return View(await _memberService.GetUserViewModelByUserName(userName));
         }
 
 
@@ -213,10 +210,10 @@ namespace AspNetCoreIdentity.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Logout()
+        public async Task Logout()
         {
-            await  _signInManager.SignOutAsync();
-
+            
+          await   _memberService.Logout();
             return RedirectToAction("Index","Home");
         }
 

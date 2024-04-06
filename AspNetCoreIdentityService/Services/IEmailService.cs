@@ -1,7 +1,7 @@
 ﻿using AspNetCoreIdentityApp.Core.OptionsModels;
 using Microsoft.Extensions.Options;
 
-namespace AspNetCoreIdentity.Web.Services
+namespace AspNetCoreIdentityService.Services
 {
     public interface IEmailService
     {

@@ -1,6 +1,6 @@
 ﻿using AspNetCoreIdentity.Web.Extentions;
 using AspNetCoreIdentityRepository.Models;
-using AspNetCoreIdentity.Web.Services;
+using AspNetCoreIdentityService.Services;
 using AspNetCoreIdentityApp.Core.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
