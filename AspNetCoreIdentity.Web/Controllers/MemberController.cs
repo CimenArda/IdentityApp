@@ -1,5 +1,5 @@
 ﻿using AspNetCoreIdentity.Web.Extentions;
-using AspNetCoreIdentity.Web.Models;
+using AspNetCoreIdentityRepository.Models;
 using AspNetCoreIdentityApp.Core.Models;
 using AspNetCoreIdentityApp.Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;

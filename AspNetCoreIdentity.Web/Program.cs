@@ -1,6 +1,6 @@
 using AspNetCoreIdentity.Web.ClaimProvider;
 using AspNetCoreIdentity.Web.Extentions;
-using AspNetCoreIdentity.Web.Models;
+using AspNetCoreIdentityRepository.Models;
 using AspNetCoreIdentityApp.Core.OptionsModels;
 using AspNetCoreIdentity.Web.Requirements;
 using AspNetCoreIdentity.Web.Services;
@@ -17,7 +17,10 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon"));
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon"), options =>
+    {
+        options.MigrationsAssembly("AspNetCoreIdentityRepository");
+    });
 });
 
 //ýdentity

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspNetCoreIdentity.Web.Models
+namespace AspNetCoreIdentityRepository.Models
 {
     //DbContext
     public class AppDbContext : IdentityDbContext<AppUser, AppRole, string>

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace AspNetCoreIdentity.Web.Migrations
+namespace AspNetCoreIdentityRepository.Migrations
 {
     /// <inheritdoc />
     public partial class appUserUpdate : Migration
