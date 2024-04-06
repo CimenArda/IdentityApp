@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 
-namespace AspNetCoreIdentity.Web.ViewModels
+namespace AspNetCoreIdentityApp.Core.ViewModels
 {
     public class PasswordChangeViewModel
     {

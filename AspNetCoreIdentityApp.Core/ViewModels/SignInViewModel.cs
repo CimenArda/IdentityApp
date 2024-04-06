@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace AspNetCoreIdentity.Web.ViewModels
+namespace AspNetCoreIdentityApp.Core.ViewModels
 {
     public class SignInViewModel
     {

@@ -1,4 +1,4 @@
-﻿namespace AspNetCoreIdentity.Web.Models
+﻿namespace AspNetCoreIdentityApp.Core.Models
 {
     public enum Gender
     {

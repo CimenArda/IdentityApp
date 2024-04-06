@@ -1,4 +1,4 @@
-﻿namespace AspNetCoreIdentity.Web.ViewModels
+﻿namespace AspNetCoreIdentityApp.Core.ViewModels
 {
     public class UserViewModel
     {
