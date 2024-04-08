@@ -56,28 +56,21 @@ namespace AspNetCoreIdentity.Web.Controllers
             }
 
 
-            var currentUser = await _userManager.FindByNameAsync(User.Identity!.Name!);
-
-            var checkOldPassword = await _userManager.CheckPasswordAsync(currentUser,request.PasswordOld);
-            
-            if (!checkOldPassword)
+            if (! await _memberService.CheckPasswordAsync(userName,request.PasswordOld))
             {
                 ModelState.AddModelError(string.Empty, "Eski şifreniz yanlış");
                 return View();
             }
-            var resultChangePassword = await _userManager.ChangePasswordAsync(currentUser,request.PasswordOld, request.PasswordNewConfirm!);
+            var (isSuccess,errors) = await _memberService.ChangePasswordAsync(userName,request.PasswordOld,request.PasswordNew!);
 
-            if (!resultChangePassword.Succeeded)
+
+            if (!isSuccess)
             {
-                ModelState.AddErrorModelList(resultChangePassword.Errors.Select(x=>x.Description).ToList());
+                ModelState.AddIdentityErrors(errors);
                 return View();
             }
 
-            await _userManager.UpdateSecurityStampAsync(currentUser);
-            await _signInManager.SignOutAsync();
-            await _signInManager.PasswordSignInAsync(currentUser,request.PasswordNew!,true,false);
-
-
+          
             TempData["SuccessMessage"] = "Şifreniz başarıyla değiştirilmiştir";
 
             return View();
@@ -88,18 +81,9 @@ namespace AspNetCoreIdentity.Web.Controllers
         public  async Task<IActionResult> UserEdit()
         {
             ViewBag.GenderList = new SelectList(Enum.GetNames(typeof(Gender)));
-            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
-            var userEditViewModel = new UserEditViewModel()
-            {
-                UserName=currentUser.UserName,
-                BirthDay = currentUser.Birthday.HasValue ? currentUser.Birthday.Value : default(DateTime),
-                Email = currentUser.Email,
-                Phone=currentUser.PhoneNumber,
-                City=currentUser.City,
-                Gender=currentUser.Gender,
-            };
+           
 
-            return View(userEditViewModel);
+            return View(await _memberService.GetUserEditViewModelAsync(userName));
         }
 
 
@@ -111,56 +95,20 @@ namespace AspNetCoreIdentity.Web.Controllers
                 return View();
             }
 
-            var currentUser = await _userManager.FindByNameAsync(User.Identity!.Name!);
-
-            currentUser.UserName= request.UserName;
-            currentUser.Email = request.Email;
-            currentUser.Birthday = request.BirthDay;
-            currentUser.City = request.City;
-            currentUser.Gender= request.Gender;
-            currentUser.PhoneNumber = request.Phone;
+            var  (isSuccess,errors) = await _memberService.EditUserAsync(request, userName);
 
 
-            if (request.Picture != null && request.Picture.Length>0)
+
+            if (!isSuccess)
             {
-                var wwwrootFolder = _fileProvider.GetDirectoryContents("wwwroot");
-                
-                var randomFileName = $"{Guid.NewGuid().ToString()}{Path.GetExtension(request.Picture.FileName)}"; //.jpg .png
-
-
-                var newPicturePath =Path.Combine(wwwrootFolder.First(x=>x.Name =="UserPicture").PhysicalPath!,randomFileName);
-
-                using var stream = new FileStream(newPicturePath, FileMode.Create);
-                await request.Picture.CopyToAsync(stream);
-
-                currentUser.Picture = randomFileName;
-
-            }
-               var updateToUserResult=await _userManager.UpdateAsync(currentUser);
-
-
-            if (!updateToUserResult.Succeeded)
-            {
-                ModelState.AddErrorModelList(updateToUserResult.Errors.Select(x=>x.Description).ToList());
+                ModelState.AddIdentityErrors(errors);
                 return View();
             }
 
-            await _userManager.UpdateSecurityStampAsync(currentUser);
-            await _signInManager.SignOutAsync();
-            await _signInManager.SignInAsync(currentUser,true);
-
-            var userEditViewModel = new UserEditViewModel()
-            {
-                UserName = currentUser.UserName,
-                BirthDay = currentUser.Birthday.HasValue ? currentUser.Birthday.Value : default(DateTime),
-                Email = currentUser.Email,
-                Phone = currentUser.PhoneNumber,
-                City = currentUser.City,
-                Gender = currentUser.Gender,
-               
-            };
+          
+           
             TempData["SuccessMessage"] = "Kullanıcı Bilgileriniz Başarıyla  değiştirilmiştir";
-            return View(userEditViewModel);
+            return View(await _memberService.GetUserEditViewModelAsync(userName));
         }
 
 
@@ -210,10 +158,10 @@ namespace AspNetCoreIdentity.Web.Controllers
             return View();
         }
 
-        public async Task Logout()
+        public  IActionResult Logout()
         {
             
-          await   _memberService.Logout();
+            _memberService.Logout();
             return RedirectToAction("Index","Home");
         }
 
